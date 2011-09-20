@@ -1,0 +1,9 @@
+{
+  "name": "big-switcher",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "",
+    "socket.io": "",
+	"coffee-script": ""
+  }
+}
