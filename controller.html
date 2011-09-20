@@ -5,7 +5,6 @@
   </head>
   <body>
     <h1>Controller</h1>
-    <input type="text" autofocus="autofocus" />
     <button type="button">next</button>
     <button type="button">previous</button>
     <button type="button">whisper</button>
@@ -40,10 +39,8 @@
 		socket.on 'secret', (message) ->
 			console.log message
 
-		$input = $ 'input'
-
 		$('button').click ->
-			socket.emit $(this).text(), $input.val()
+			socket.emit $(this).text()
 			$input.val('').focus()
 
     </script>

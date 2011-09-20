@@ -1,53 +1,48 @@
 <!doctype html>
 <html>
   <head>
-    <title>Viewer</title>
+	<title>Viewer</title>
   </head>
   <body>
-    <h1>Viewer</h1>
-    <input type="text" autofocus="autofocus" />
-    <button type="button">publish</button>
-    <button type="button">broadcast</button>
-    <button type="button">whisper</button>
-    <p>Status: <span id="status">Undefined</span></p>
-    <ol id="messages"></ol>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
-    <script type="text/coffeescript">
+	<h1>Viewer</h1>
+	<p>Status: <span id="status">Undefined</span></p>
+	<img id="image" src="/images/1">
 
-      jQuery ($) ->
+	<ol id="messages"></ol>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="http://jashkenas.github.com/coffee-script/extras/coffee-script.js"></script>
+	<script type="text/coffeescript">
 
-        $status = $ '#status'
-        socket = io.connect()
+	jQuery ($) ->
 
-        socket.on 'connect', ->
-          $status.text 'Connected'
+	$status = $ '#status'
+	$image = $ '#image'
+	
+	socket = io.connect()
 
-        socket.on 'disconnect', ->
-          $status.text 'Disconnected'
+	socket.on 'connect', ->
+		$status.text 'Connected'
 
-        socket.on 'reconnecting', (seconds) ->
-          $status.text "Reconnecting in #{seconds} seconds"
+	socket.on 'disconnect', ->
+		$status.text 'Disconnected'
 
-        socket.on 'reconnect', ->
-          $status.text 'Reconnected'
+	socket.on 'reconnecting', (seconds) ->
+		$status.text "Reconnecting in #{seconds} seconds"
 
-        socket.on 'reconnect_failed', ->
-          $status.text 'Failed to reconnect'
+	socket.on 'reconnect', ->
+		$status.text 'Reconnected'
 
-        socket.on 'message', (message) ->
-          $('<li>').text(message).appendTo $('#messages')
+	socket.on 'reconnect_failed', ->
+		$status.text 'Failed to reconnect'
 
-        socket.on 'secret', (message) ->
-          console.log message
+	socket.on 'page', (msg) ->
+		$('<li>').text("Page: " + msg.page).appendTo $('#messages')
+		$image.attr("src", "/images/" + msg.page)
+		
 
-        $input = $ 'input'
-
-        $('button').click ->
-          socket.emit $(this).text(), $input.val()
-          $input.val('').focus()
-
-    </script>
+	socket.on 'secret', (message) ->
+		console.log message
+	</script>
   </body>
 </html>

@@ -16,18 +16,20 @@ app.get '/images/:id', (req,res) ->
 
 io = require('socket.io').listen app
 
-count = 0
+count = 1
 
 io.sockets.on 'connection', (socket) ->
 	socket.on 'next', (message) ->
-		count = (count + 1)%5
-		io.sockets.send 'open ' + count
+		count = count + 1
+		if count > 3
+			count = 3
+		io.sockets.emit('page', { page : count })
 
 	socket.on 'previous', (message) ->
 		count = (count - 1)
-		if count < 0
-			count = 0
-		io.sockets.send 'open ' + count
+		if count < 1
+			count = 1
+		io.sockets.emit 'page', { page : count }
 		
 	socket.on 'broadcast', (message) ->
 		socket.broadcast.send message
